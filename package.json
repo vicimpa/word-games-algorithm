@@ -1,5 +1,12 @@
 {
   "devDependencies": {
-    "@types/node": "^20.2.0"
+    "@swc/core": "^1.3.58",
+    "@types/node": "^20.2.0",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "crossword": "nodemon crossword.ts",
+    "wordsearch": "nodemon wordsearch.ts"
   }
 }
