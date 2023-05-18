@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "CommonJS"
+  },
+  "ts-node": {
+    "swc": true
+  }
+}
