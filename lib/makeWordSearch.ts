@@ -43,7 +43,7 @@ const DOPS: [x: number, y: number][] = [
   [1, 1]
 ];
 
-export function makeWordSearch(
+export function makeWordSearch<T extends object>(
   words: string[],
   {
     width = 15,
@@ -58,7 +58,7 @@ export function makeWordSearch(
   while (true) {
 
     try {
-      const objectWords: Word[] = [];
+      const objectWords: Word<T>[] = [];
       const collizion = ColisionMap.make(objectWords);
 
       let variants = [
@@ -73,7 +73,7 @@ export function makeWordSearch(
       for (const word of words) {
         variants = randomArray(variants);
 
-        const newWord = new Word(word, oneOf(...variants));
+        const newWord = new Word<T>(word, oneOf(...variants));
 
         if (newWord.width > width || newWord.height > height)
           throw new Error('Oversize word in table');

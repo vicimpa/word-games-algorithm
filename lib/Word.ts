@@ -12,7 +12,12 @@ export const WordDirection = {
   [WordType.RIGHT]: [1, 1]
 };
 
-export class Word {
+export type TWord<T> = string | {
+  word: string;
+  meta?: T;
+};
+
+export class Word<T> {
   x = 0;
   y = 0;
 
@@ -20,9 +25,12 @@ export class Word {
   type!: WordType;
   readonly length!: number;
 
+
+  #meta?: T;
   #used = new Set<number>();
 
   get used() { return this.#used; }
+  get meta() { return this.#meta; }
 
   get width() {
     switch (this.type) {
@@ -63,7 +71,12 @@ export class Word {
     }
   }
 
-  constructor(word: string, type: WordType) {
+  constructor(word: TWord<T>, type: WordType) {
+    if (typeof word === 'object') {
+      this.#meta = word.meta;
+      word = word.word;
+    }
+
     Object.defineProperties(this, {
       word: { enumerable: true, value: word, writable: false, configurable: false },
       length: { enumerable: true, value: word.length, writable: false, configurable: false },

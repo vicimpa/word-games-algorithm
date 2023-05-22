@@ -2,7 +2,9 @@
   "compilerOptions": {
     "strict": true,
     "target": "ESNext",
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "ts-node": {
     "swc": true

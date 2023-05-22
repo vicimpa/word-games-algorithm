@@ -25,8 +25,8 @@ export class ColisionMap {
     return this.#map.clear();
   }
 
-  check(
-    word: Word,
+  check<T extends Word<any>>(
+    word: T,
     rule: [x: number, y: number][] = [],
     skips: [x: number, y: number][] = [],
     skipIdentity = false
@@ -54,7 +54,7 @@ export class ColisionMap {
     return false;
   }
 
-  append(word: Word) {
+  append<T extends Word<any>>(word: T) {
     for (const [x, y, c] of word.vectors())
       this.set(x, y, c);
   }
@@ -109,9 +109,9 @@ export class ColisionMap {
     }
   }
 
-  static make(words: Word[], output = new this()) {
+  static make<T extends object>(words: T[], output = new this()) {
     for (const word of words)
-      output.append(word);
+      output.append(word as any);
 
     return output;
   }

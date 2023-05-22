@@ -1,6 +1,6 @@
 import { ColisionMap } from "./ColisionMap";
 import { oneOf, randomArray } from "./utils";
-import { Word, WordType } from "./Word";
+import { TWord, Word, WordType } from "./Word";
 
 export interface IOptions {
   /** @description Положение первого слова (random()) */
@@ -26,8 +26,8 @@ const CHECK_RULE: [x: number, y: number][] = [
   [-1, 0]
 ];
 
-export function makeCrossword(
-  words: string[],
+export function makeCrossword<T extends object>(
+  words: TWord<T>[],
   {
     firstType = oneOf(WordType.HORIZONTAL, WordType.VERTICAL),
     tryAttempts = 1000,
@@ -42,11 +42,11 @@ export function makeCrossword(
       words = randomArray(words);
     }
     try {
-      const objectWords: Word[] = [];
+      const objectWords: Word<T>[] = [];
       const collizion = ColisionMap.make(objectWords);
 
       for (const word of words) {
-        const newWord = new Word(word, firstType);
+        const newWord = new Word<T>(word, firstType);
         const forFind = randomCheck ? randomArray(objectWords) : objectWords;
 
         const find = forFind.find(w => {
