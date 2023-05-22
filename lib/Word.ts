@@ -71,6 +71,7 @@ export class Word<T = never> {
 
   constructor(word: TWord<T>, type: WordType) {
     let meta!: T | undefined;
+
     if (typeof word === 'object') {
       meta = word.meta;
       word = word.word;
