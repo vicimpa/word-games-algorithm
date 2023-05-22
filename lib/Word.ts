@@ -24,13 +24,11 @@ export class Word<T = never> {
   readonly word!: string;
   type!: WordType;
   readonly length!: number;
+  readonly meta!: T;
 
-
-  #meta?: T;
   #used = new Set<number>();
 
   get used() { return this.#used; }
-  get meta() { return this.#meta; }
 
   get width() {
     switch (this.type) {
@@ -72,15 +70,17 @@ export class Word<T = never> {
   }
 
   constructor(word: TWord<T>, type: WordType) {
+    let meta!: T | undefined;
     if (typeof word === 'object') {
-      this.#meta = word.meta;
+      meta = word.meta;
       word = word.word;
     }
 
     Object.defineProperties(this, {
       word: { enumerable: true, value: word, writable: false, configurable: false },
       length: { enumerable: true, value: word.length, writable: false, configurable: false },
-      type: { enumerable: true, value: type }
+      type: { enumerable: true, value: type },
+      meta: { enumerable: true, value: meta, writable: false, configurable: false }
     });
   }
 }

@@ -1,4 +1,3 @@
-import { wordsArray3 } from "./data";
 import data from "./data.json";
 import { ColisionMap } from "./lib/ColisionMap";
 import { makeCrossword } from "./lib/makeCrossword";
@@ -15,6 +14,8 @@ const words = makeCrossword(wordsArray, {
   randomChars: true,
   randomCheck: true,
 });
+
+console.log(JSON.parse(JSON.stringify(words)));
 
 const collizion = ColisionMap.make(words);
 renderConsole(collizion);
