@@ -73,7 +73,7 @@ export function makeWordSearch<T extends object>(
       for (const word of words) {
         variants = randomArray(variants);
 
-        const newWord = new Word<T>(word, oneOf(...variants));
+        const newWord = new Word(word, oneOf(...variants));
 
         if (newWord.width > width || newWord.height > height)
           throw new Error('Oversize word in table');

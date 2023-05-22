@@ -17,7 +17,7 @@ export type TWord<T> = string | {
   meta?: T;
 };
 
-export class Word<T> {
+export class Word<T = never> {
   x = 0;
   y = 0;
 

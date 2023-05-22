@@ -46,7 +46,7 @@ export function makeCrossword<T extends object>(
       const collizion = ColisionMap.make(objectWords);
 
       for (const word of words) {
-        const newWord = new Word<T>(word, firstType);
+        const newWord = new Word(word, firstType);
         const forFind = randomCheck ? randomArray(objectWords) : objectWords;
 
         const find = forFind.find(w => {
