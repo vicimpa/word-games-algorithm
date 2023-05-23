@@ -1,3 +1,5 @@
+import { Matrix } from "./Matrix";
+
 export class VectorKey {
   static #keys = new Map<number, Map<number, VectorKey>>();
 
@@ -71,13 +73,11 @@ export class VectorMap<T> {
     }
   }
 
-  matrix(): (T | undefined)[][];
-  matrix<E>(nullValue: E | ((x: number, y: number) => E)): (T | E)[][];
-  matrix<E>(nullValue?: E | ((x: number, y: number) => E)): (T | E | undefined)[][] {
-    return Array.from({ length: this.#maxY - this.#minY }, (_, y) => (
-      Array.from({ length: this.#maxX - this.#minX }, (_, x) => (
-        this.get(x + this.#minX, y + this.#minY) ?? (nullValue instanceof Function ? nullValue(x, y) : nullValue)
-      ))
+  matrix(): Matrix<T | undefined>;
+  matrix<E>(nullValue: E | ((x: number, y: number) => E)): Matrix<T | E>;
+  matrix<E>(nullValue?: E | ((x: number, y: number) => E)): Matrix<T | E | undefined> {
+    return new Matrix(this.#maxX - this.#minX, this.#maxY - this.#minY, (x, y) => (
+      this.get(x + this.#minX, y + this.#minY) ?? (nullValue instanceof Function ? nullValue(x, y) : nullValue)
     ));
   }
 
