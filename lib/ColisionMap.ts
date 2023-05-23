@@ -1,30 +1,7 @@
+import { VectorMap } from "./VectorMap";
 import { Word } from "./Word";
 
-const SPLIT_KEY = ';';
-
-export class ColisionMap {
-  #map = new Map<string, string>;
-
-  #key(x: number, y: number) {
-    return [x, y].join(SPLIT_KEY);
-  }
-
-  has(x: number, y: number) {
-    return this.#map.has(this.#key(x, y));
-  }
-
-  get(x: number, y: number) {
-    return this.#map.get(this.#key(x, y));
-  }
-
-  set(x: number, y: number, v: string) {
-    return this.#map.set(this.#key(x, y), v);
-  }
-
-  clear() {
-    return this.#map.clear();
-  }
-
+export class ColisionMap extends VectorMap<string> {
   check<T extends Word<any>>(
     word: T,
     rule: [x: number, y: number][] = [],
@@ -76,37 +53,15 @@ export class ColisionMap {
     const width = maxX - minX;
     const height = maxY - minY;
 
-    const output: string[][] = Array.from(
+    const output = Array.from(
       { length: height },
-      () => Array.from(
-        { length: width }
+      (_, y) => Array.from(
+        { length: width },
+        (_, x) => this.get(x + minX, y + minY) ?? ' '
       )
     );
 
-    let deltaX = minX < 0 ? Math.abs(minX) : 0;
-    let deltaY = minY < 0 ? Math.abs(minY) : 0;
-
-    for (let y = minY; y <= maxY; y++) {
-      const row = output[y + deltaY] ?? (
-        output[y + deltaY] = []
-      );
-
-      for (let x = minX; x <= maxX; x++) {
-        row[x + deltaX] = this.get(x, y)!;
-      }
-    }
-
     return output;
-  }
-
-  *entries() {
-    for (const [key, value] of this.#map) {
-      const [x, y] = key.split(SPLIT_KEY).map(Number);
-      yield [[x, y], value] as [
-        vec: [x: number, y: number],
-        value: string
-      ];
-    }
   }
 
   static make<T extends object>(words: T[], output = new this()) {

@@ -15,5 +15,7 @@ const words = makeCrossword(wordsArray, {
   randomCheck: true,
 });
 
+console.log(JSON.stringify(words));
+
 const collizion = ColisionMap.make(words);
 renderConsole(collizion);
