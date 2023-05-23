@@ -36,34 +36,6 @@ export class ColisionMap extends VectorMap<string> {
       this.set(x, y, c);
   }
 
-  matrix() {
-    let
-      minX = Infinity,
-      minY = Infinity,
-      maxX = -Infinity,
-      maxY = -Infinity;
-
-    for (const [[x, y]] of this.entries()) {
-      if (x < minX) minX = x;
-      if (y < minY) minY = y;
-      if (x > maxX) maxX = x;
-      if (y > maxY) maxY = y;
-    }
-
-    const width = maxX - minX;
-    const height = maxY - minY;
-
-    const output = Array.from(
-      { length: height },
-      (_, y) => Array.from(
-        { length: width },
-        (_, x) => this.get(x + minX, y + minY) ?? ' '
-      )
-    );
-
-    return output;
-  }
-
   static make<T extends object>(words: T[], output = new this()) {
     for (const word of words)
       output.append(word as any);

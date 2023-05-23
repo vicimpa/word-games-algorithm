@@ -12,7 +12,7 @@ export function renderConsole(matrix: ColisionMap | string[][], {
   empty = ' '
 } = {} as IOptions) {
   if (matrix instanceof ColisionMap)
-    return renderConsole(matrix.matrix(), { item, empty });
+    return renderConsole(matrix.matrix(' '), { item, empty });
 
   matrix = [...matrix].map(e => e ?? []);
   const rows: string[] = [];

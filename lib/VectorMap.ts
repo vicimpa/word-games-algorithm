@@ -33,36 +33,52 @@ export class VectorKey {
 export class VectorMap<T> {
   #map = new Map<VectorKey, T>();
 
-  get(x: number, y: number, defaultValue?: T | (() => T)) {
-    const key = VectorKey.key(x, y);
+  #minX = Infinity;
+  #minY = Infinity;
+  #maxX = -Infinity;
+  #maxY = -Infinity;
 
+  get(x: number, y: number, defaultValue?: T | (() => T)) {
     const generateDefault = (defaultValue?: T | (() => T)): T | undefined => {
       if (defaultValue instanceof Function)
         defaultValue = defaultValue();
 
       if (defaultValue) {
-        this.#map.set(key, defaultValue);
+        this.set(x, y, defaultValue);
         return defaultValue;
       }
     };
 
-    return this.#map.get(key) ?? generateDefault(defaultValue);
+    return this.#map.get(VectorKey.key(x, y)) ?? generateDefault(defaultValue);
   }
 
   set(x: number, y: number, v: T) {
-    const key = VectorKey.key(x, y);
-    return this.#map.set(key, v);
+    this.#maxX = Math.max(x, this.#maxX);
+    this.#maxY = Math.max(y, this.#maxY);
+    this.#minX = Math.min(x, this.#minX);
+    this.#minY = Math.min(y, this.#minY);
+
+    return this.#map.set(VectorKey.key(x, y), v);
   }
 
   has(x: number, y: number) {
-    const key = VectorKey.key(x, y);
-    return this.#map.has(key);
+    return this.#map.has(VectorKey.key(x, y));
   }
 
   *entries() {
     for (const [key, value] of this.#map) {
       yield [key, value] as [VectorKey, T];
     }
+  }
+
+  matrix(): (T | undefined)[][];
+  matrix<E>(nullValue: E | ((x: number, y: number) => E)): (T | E)[][];
+  matrix<E>(nullValue?: E | ((x: number, y: number) => E)): (T | E | undefined)[][] {
+    return Array.from({ length: this.#maxY - this.#minY }, (_, y) => (
+      Array.from({ length: this.#maxX - this.#minX }, (_, x) => (
+        this.get(x + this.#minX, y + this.#minY) ?? (nullValue instanceof Function ? nullValue(x, y) : nullValue)
+      ))
+    ));
   }
 
   clear() {
