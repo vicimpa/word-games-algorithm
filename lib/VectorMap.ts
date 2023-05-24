@@ -40,6 +40,9 @@ export class VectorMap<T> {
   #maxX = -Infinity;
   #maxY = -Infinity;
 
+  get width() { return this.#maxX - this.#minX + 1; }
+  get height() { return this.#maxY - this.#minY + 1; }
+
   get(x: number, y: number, defaultValue?: T | (() => T)) {
     const generateDefault = (defaultValue?: T | (() => T)): T | undefined => {
       if (defaultValue instanceof Function)
@@ -76,7 +79,7 @@ export class VectorMap<T> {
   matrix(): Matrix<T | undefined>;
   matrix<E>(nullValue: E | ((x: number, y: number) => E)): Matrix<T | E>;
   matrix<E>(nullValue?: E | ((x: number, y: number) => E)): Matrix<T | E | undefined> {
-    return new Matrix(this.#maxX - this.#minX, this.#maxY - this.#minY, (x, y) => (
+    return new Matrix(this.width, this.height, (x, y) => (
       this.get(x + this.#minX, y + this.#minY) ?? (nullValue instanceof Function ? nullValue(x, y) : nullValue)
     ));
   }
