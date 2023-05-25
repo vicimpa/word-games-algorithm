@@ -1,6 +1,7 @@
 import { ColisionMap } from "./ColisionMap";
 import { oneOf, randomArray } from "./utils";
 import { TWord, Word, WordType } from "./Word";
+import { WordCount } from "./WordCount";
 
 export interface IOptions {
   /** @description Положение первого слова (random()) */
@@ -36,6 +37,7 @@ export function makeCrossword<T extends object>(
     randomChars = false
   } = {} as IOptions
 ) {
+  const counts = new WordCount();
   let attempts = tryAttempts;
   while (true) {
     if (randomPosition) {
@@ -90,7 +92,8 @@ export function makeCrossword<T extends object>(
         });
 
         if (objectWords.length && !find) {
-          throw new Error(`Can not make crossword with word "${word}"`);
+          counts.append(word);
+          throw new Error(`Can not make crossword with word "${counts.getMaxCount()?.word}"`);
         }
 
         objectWords.push(newWord);

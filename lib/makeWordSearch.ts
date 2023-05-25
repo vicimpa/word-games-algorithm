@@ -2,6 +2,7 @@ import { ColisionMap } from "./ColisionMap";
 import { oneOf, randomArray } from "./utils";
 import { vectorGenerator } from "./vectorGenerator";
 import { Word, WordType } from "./Word";
+import { WordCount } from "./WordCount";
 
 export enum Difficulty {
   EASY,
@@ -53,6 +54,7 @@ export function makeWordSearch<T extends object>(
     margin = Margin.NONE,
   } = {} as IOptions
 ) {
+  const counts = new WordCount();
   const dops = DOPS.slice(0, 1 + (margin * 4));
   let attempts = tryAttempts;
   while (true) {
@@ -89,8 +91,10 @@ export function makeWordSearch<T extends object>(
           return !collizion.check(newWord, dops);
         });
 
-        if (!positions.length)
-          throw new Error(`Can not insert word ${word}`);
+        if (!positions.length) {
+          counts.append(word);
+          throw new Error(`Can not insert word ${counts.getMaxCount()?.word}`);
+        }
 
         const position = randomArray(positions)[0];
         newWord.x = position[0];
